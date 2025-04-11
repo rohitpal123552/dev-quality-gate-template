@@ -13,9 +13,11 @@ repos:
         entry: bash scripts/run_pylint.sh
         language: system
         types: [python]
+        always_run: true
 
       - id: coverage-check
         name: Check test coverage
         entry: bash scripts/run_coverage.sh
         language: system
         types: [python]
+        always_run: true
