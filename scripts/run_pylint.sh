@@ -17,4 +17,3 @@ if (( $(echo "$score < $required_score" | bc -l) )); then
 else
     echo "✅ Pylint score OK: $score"
 fi
-

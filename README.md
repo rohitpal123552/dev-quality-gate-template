@@ -19,4 +19,3 @@ Make code changes and try to push. The push will be blocked if quality gates fai
 ---
 
 Add your own code in `sample_module/` and tests in `tests/`.
-

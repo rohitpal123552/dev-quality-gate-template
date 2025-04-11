@@ -7,4 +7,3 @@ source = ["sample_module"]
 
 [tool.coverage.report]
 omit = ["tests/*"]
-

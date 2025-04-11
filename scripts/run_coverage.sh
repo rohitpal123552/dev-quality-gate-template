@@ -13,4 +13,3 @@ if (( $(echo "$coverage_percent < $required_coverage" | bc -l) )); then
 else
     echo "✅ Test coverage OK: $coverage_percent%"
 fi
-
