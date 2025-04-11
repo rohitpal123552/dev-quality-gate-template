@@ -4,12 +4,14 @@ set -e
 
 echo "🧪 Running tests with coverage..."
 coverage run -m pytest
-coverage_percent=$(coverage report | grep TOTAL | awk '{print $4}' | sed 's/%//')
+coverage report > coverage_output.txt
+coverage_percent=$(grep -Eo '[0-9]+\%' coverage_output.txt | tail -1 | tr -d '%')
+min_coverage=80
 
-required_coverage=80
-if (( $(echo "$coverage_percent < $required_coverage" | bc -l) )); then
-    echo "❌ Test coverage too low: $coverage_percent%"
+if (( coverage_percent < min_coverage )); then
+    echo "❌ Code coverage too low: $coverage_percent% (min $min_coverage%)"
+    cat coverage_output.txt
     exit 1
 else
-    echo "✅ Test coverage OK: $coverage_percent%"
+    echo "✅ Coverage passed: $coverage_percent%"
 fi
