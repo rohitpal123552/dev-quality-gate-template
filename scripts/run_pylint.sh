@@ -4,7 +4,8 @@ set -e
 
 echo "🔍 Running Pylint..."
 pylint_output=$(pylint sample_module/ || true)
-echo "$pylint_output" > pylint_output.txt
+echo $pylint_output
+#echo "$pylint_output" > pylint_output.txt
 
 # Try to parse the score line from the output
 score_line=$(echo "$pylint_output" | grep 'Your code has been rated at')
