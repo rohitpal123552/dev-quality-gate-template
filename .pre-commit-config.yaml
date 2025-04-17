@@ -10,16 +10,16 @@ repos:
     hooks:
       - id: pylint-check
         name: Run pylint
-        entry: bash scripts/run_pylint.sh
-        language: system
+        entry: ./scripts/run_pylint.sh
+        language: script
         types: [python]
         stages: [commit]
         always_run: true
 
       - id: coverage-check
         name: Check test coverage
-        entry: bash scripts/run_coverage.sh
-        language: system
+        entry: ./scripts/run_coverage.sh
+        language: script
         types: [python]
         stages: [push]
         always_run: true
