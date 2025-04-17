@@ -34,7 +34,9 @@ main() {
 
     # Extract score
     score_line=$(grep "Your code has been rated at" "$pylint_output_file" | tail -n1 || true)
-    score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
+    # score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
+    score=$(echo "$score_line" | grep -oE '[0-9]+\.[0-9]+(?=/10)' | head -n1)
+
 
     print "\nPylint score: $score / 10"
 
