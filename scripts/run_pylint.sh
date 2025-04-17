@@ -2,42 +2,34 @@
 
 REQUIRED_SCORE=8.0
 
-# Colors
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-NC='\033[0m'
-
+# Avoid escape sequences breaking in pre-commit
 print() {
-    echo -e "$@"
+    echo -e "$@" | sed 's/\\033\[[0-9;]*m//g'
 }
 
 main() {
-    print "${YELLOW}🔍 Running Pylint...${NC}"
+    echo "🔍 Running Pylint..."
 
-    # Run Pylint and capture output + exit code
     pylint_output=$(pylint sample_module 2>&1 | tee /tmp/pylint_output.txt)
     pylint_exit_code=$?
 
-    # Show any lint messages
-    if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " /tmp/pylint_output.txt; then
-        print "\n${YELLOW}⚠️ Issues Found:${NC}"
-        grep -E "^[^:]+:[0-9]+:[0-9]+: " /tmp/pylint_output.txt
+    issue_lines=$(grep -E "^[^:]+:[0-9]+:[0-9]+: " /tmp/pylint_output.txt || true)
+    if [[ -n "$issue_lines" ]]; then
+        echo -e "\n⚠️ Issues Found:"
+        echo "$issue_lines"
     fi
 
-    # Extract score
     score_line=$(grep "Your code has been rated at" /tmp/pylint_output.txt || true)
     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
 
-    print "\n📊 Pylint score: $score / 10"
+    echo -e "\n📊 Pylint score: $score / 10"
 
-    # Only fail if score is below threshold
     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
-        print "${RED}❌ Pylint score too low: $score${NC}"
+        echo "❌ Pylint score too low: $score"
         exit 1
     fi
 
-    print "${GREEN}✅ Pylint score OK. Commit allowed, but check the warnings above.${NC}"
+    echo "✅ Pylint score OK. Commit allowed, but check the warnings above."
     exit 0
 }
 
