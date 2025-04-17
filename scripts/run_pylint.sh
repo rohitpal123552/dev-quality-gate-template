@@ -13,44 +13,122 @@ print() {
 }
 
 main() {
-    print "${YELLOW}🔍 Running Pylint...${NC}"
+    print "${YELLOW}Running Pylint on all Python files...${NC}"
 
-    # Run pylint and tee output to both screen and file
+    # # Find all Python files, excluding common dirs
+    # py_files=$(find . -type f -name "*.py" )
+    #     # -not -path "./venv/*" \
+    #     # -not -path "./.venv/*" \
+    #     # -not -path "*/__pycache__/*" \
+    #     # -not -path "./.git/*")
+
+    # if [ -z "$py_files" ]; then
+    #     print "${YELLOW}⚠️ No Python files found to lint.${NC}"
+    #     exit 0
+    # fi
+
+    # Run pylint on discovered files
     pylint_output_file=$(mktemp)
     pylint sample_module 2>&1 | tee "$pylint_output_file"
-    pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
+    pylint_exit_code=${PIPESTATUS[0]}
 
-    # Extract score from output
-    score_line=$(grep "Your code has been rated at" "$pylint_output_file" || true)
+    # Extract score
+    score_line=$(grep "Your code has been rated at" "$pylint_output_file" | tail -n1 || true)
     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
 
-    print "\n📊 Pylint score: $score / 10"
+    print "\nPylint score: $score / 10"
 
     # Check for issues
     issues_exist=false
     if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"; then
         issues_exist=true
-        print "\n${YELLOW}⚠️ Issues Found:${NC}"
+        print "\n${YELLOW}Issues Found:${NC}"
         grep -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"
     fi
 
-    # Handle score check
+    # Score check
     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
-        print "\n${RED}❌ Commit blocked: Pylint score too low ($score).${NC}"
+        print "\n${RED}Commit blocked: Pylint score too low ($score).${NC}"
         exit 1
     fi
 
-    # Handle issues with acceptable score
+    # Warn if issues but allow commit
     if [ "$issues_exist" = true ]; then
-        print "\n${YELLOW}✅ Commit allowed: Score is acceptable but issues were found.${NC}"
+        print "\n${YELLOW}Commit allowed: Score is acceptable but issues were found.${NC}"
         exit 0
     fi
 
-    # All clear
-    print "\n${GREEN}✅ Commit allowed: Pylint passed with score $score and no issues.${NC}"
+    print "\n${GREEN}Commit allowed: Pylint passed with score $score and no issues.${NC}"
 }
 
 main "$@"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# #!/bin/bash
+
+# REQUIRED_SCORE=8.0
+
+# # Colors
+# RED='\033[0;31m'
+# GREEN='\033[0;32m'
+# YELLOW='\033[1;33m'
+# NC='\033[0m'
+
+# print() {
+#     echo -e "$@"
+# }
+
+# main() {
+#     print "${YELLOW}🔍 Running Pylint...${NC}"
+
+#     # Run pylint and tee output to both screen and file
+#     pylint_output_file=$(mktemp)
+#     pylint sample_module 2>&1 | tee "$pylint_output_file"
+#     pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
+
+#     # Extract score from output
+#     score_line=$(grep "Your code has been rated at" "$pylint_output_file" || true)
+#     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
+
+#     print "\n📊 Pylint score: $score / 10"
+
+#     # Check for issues
+#     issues_exist=false
+#     if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"; then
+#         issues_exist=true
+#         print "\n${YELLOW}⚠️ Issues Found:${NC}"
+#         grep -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"
+#     fi
+
+#     # Handle score check
+#     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
+#         print "\n${RED}❌ Commit blocked: Pylint score too low ($score).${NC}"
+#         exit 1
+#     fi
+
+#     # Handle issues with acceptable score
+#     if [ "$issues_exist" = true ]; then
+#         print "\n${YELLOW}✅ Commit allowed: Score is acceptable but issues were found.${NC}"
+#         exit 0
+#     fi
+
+#     # All clear
+#     print "\n${GREEN}✅ Commit allowed: Pylint passed with score $score and no issues.${NC}"
+# }
+
+# main "$@"
 
 
 
