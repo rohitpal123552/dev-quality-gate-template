@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# set -euo pipefail
-
 REQUIRED_SCORE=9.0
 
 # ANSI Colors
@@ -15,13 +13,14 @@ print() {
 }
 
 run_pylint() {
-    print "${YELLOW}🔍 Running Pylint...${NC}"
+    print "${YELLOW} Running Pylint...${NC}"
     pylint_output=$(pylint sample_module/ || true)
     echo "$pylint_output"
     echo
-    echo "${YELLOW}⚠️  Issues Found:${NC}"
-    echo "$pylint_output" | grep -E "^.*:[0-9]+:[0-9]+: [A-Z][0-9]{4}:" || echo "No issues found."
-    echo
+    # echo "${YELLOW} Issues Found:${NC}"
+    print "\n${YELLOW} Issues Found:${NC}"
+    print "$pylint_output" | grep -E "^.*:[0-9]+:[0-9]+: [A-Z][0-9]{4}:" || print "No issues found."
+    print
 }
 
 check_score() {
@@ -38,10 +37,10 @@ check_score() {
     print "${YELLOW}Pylint score: $score / 10${NC}"
 
     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
-        print "${RED}❌ Pylint score too low: $score${NC}"
+        print "${RED}Pylint score too low: $score${NC}"
         exit 1
     else
-        print "${GREEN}✅ Pylint score OK: $score${NC}"
+        print "${GREEN}Pylint score OK: $score${NC}"
     fi
 }
 
