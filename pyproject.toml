@@ -1,4 +1,5 @@
-[tool.pylint.MESSAGES_CONTROL]
+[tool.pylint]
+[tool.pylint."MESSAGES CONTROL"]
 disable = ["missing-docstring"]
 
 [tool.coverage.run]
