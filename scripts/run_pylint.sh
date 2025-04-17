@@ -43,7 +43,7 @@ main() {
     # Fail if pylint exited with errors or warnings
     if [[ $pylint_exit_code -ne 0 ]]; then
         print "${RED}❌ Linting failed due to above issues.${NC}"
-        return 0
+        exit 
     fi
 
     print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
