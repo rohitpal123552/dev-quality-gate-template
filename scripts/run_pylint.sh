@@ -9,13 +9,13 @@ YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
 print() {
-    echo -e "$@"
+    echo -e "$@" >&2  
 }
 
 run_pylint() {
     print "${YELLOW} Running Pylint...${NC}"
     pylint_output=$(pylint sample_module/ || true)
-    echo "$pylint_output"
+    echo "$pylint_output" >&2  
     echo
     # echo "${YELLOW} Issues Found:${NC}"
     print "\n${YELLOW} Issues Found:${NC}"
