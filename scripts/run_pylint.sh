@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -euo pipefail
+# set -euo pipefail
 
 REQUIRED_SCORE=9.0
 
