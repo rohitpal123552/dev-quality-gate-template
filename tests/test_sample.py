@@ -48,22 +48,22 @@ def test_max_of_list_empty():
 
 
 
-# failure test cases-------------------
+# # failure test cases-------------------
 
-def test_add_failure():
-    assert sample_code.add(2, 2) == 5  # Intentional fail
+# def test_add_failure():
+#     assert sample_code.add(2, 2) == 5  # Intentional fail
 
-def test_subtract_failure():
-    assert sample_code.subtract(10, 3) == 5  # Intentional fail
+# def test_subtract_failure():
+#     assert sample_code.subtract(10, 3) == 5  # Intentional fail
 
-def test_multiply_failure():
-    assert sample_code.multiply(2, 5) == 11  # Intentional fail
+# def test_multiply_failure():
+#     assert sample_code.multiply(2, 5) == 11  # Intentional fail
 
-def test_divide_failure():
-    assert sample_code.divide(10, 2) == 6  # Intentional fail
+# def test_divide_failure():
+#     assert sample_code.divide(10, 2) == 6  # Intentional fail
 
-def test_is_even_failure():
-    assert sample_code.is_even(3) is True  # Intentional fail
+# def test_is_even_failure():
+#     assert sample_code.is_even(3) is True  # Intentional fail
 
-def test_max_of_list_failure():
-    assert sample_code.max_of_list([1, 2, 3]) == 5  # Intentional fail
+# def test_max_of_list_failure():
+#     assert sample_code.max_of_list([1, 2, 3]) == 5  # Intentional fail

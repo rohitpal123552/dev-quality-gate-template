@@ -31,6 +31,7 @@ show_issues() {
     if [[ -n "$issues" ]]; then
         echo "$issues" | while IFS= read -r line; do
             print "${RED}$line${NC}"
+            exit 1
         done
     else
         print "${GREEN}No syntax/style issues detected.${NC}"
