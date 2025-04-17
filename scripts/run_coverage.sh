@@ -43,7 +43,7 @@ run_tests_with_coverage() {
         '
 
         print "\n${RED}Please review the failed test cases above and fix them before committing.${NC}"
-        # exit 1
+        exit 1
     fi
 }
 
