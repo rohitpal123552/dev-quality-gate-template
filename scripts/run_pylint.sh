@@ -12,40 +12,64 @@ print() {
     echo -e "$@"
 }
 
-
 main() {
     print "${YELLOW}🔍 Running Pylint...${NC}"
 
+    # Run pylint and tee output to both screen and file
     pylint_output_file=$(mktemp)
     pylint sample_module 2>&1 | tee "$pylint_output_file"
-    pylint_exit_code=${PIPESTATUS[0]}
+    pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
 
-    # Extract score
+    # Extract score from output
     score_line=$(grep "Your code has been rated at" "$pylint_output_file" || true)
     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
 
     print "\n📊 Pylint score: $score / 10"
 
-    # Detect lint issues
+    # Check for issues
+    issues_exist=false
     if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"; then
+        issues_exist=true
         print "\n${YELLOW}⚠️ Issues Found:${NC}"
         grep -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"
     fi
 
-    # Score check
+    # Handle score check
     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
-        print "${RED}❌ Pylint score too low: $score${NC}"
+        print "\n${RED}❌ Commit blocked: Pylint score too low ($score).${NC}"
         exit 1
     fi
 
-    # If score OK, but issues still present
-    if [[ $pylint_exit_code -ne 0 ]]; then
-        print "${GREEN}✅ Score OK. Commit allowed, but fix the above issues soon.${NC}"
+    # Handle issues with acceptable score
+    if [ "$issues_exist" = true ]; then
+        print "\n${YELLOW}✅ Commit allowed: Score is acceptable but issues were found.${NC}"
         exit 0
     fi
 
-    print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
+    # All clear
+    print "\n${GREEN}✅ Commit allowed: Pylint passed with score $score and no issues.${NC}"
 }
+
+main "$@"
+
+
+
+
+
+
+# #!/bin/bash
+
+# REQUIRED_SCORE=8.0
+
+# # Colors
+# RED='\033[0;31m'
+# GREEN='\033[0;32m'
+# YELLOW='\033[1;33m'
+# NC='\033[0m'
+
+# print() {
+#     echo -e "$@"
+# }
 
 # main() {
 #     print "${YELLOW}🔍 Running Pylint...${NC}"
@@ -84,7 +108,7 @@ main() {
 #     print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
 # }
 
-main "$@"
+# main "$@"
 
 
 
