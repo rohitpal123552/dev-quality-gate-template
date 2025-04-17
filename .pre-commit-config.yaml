@@ -11,7 +11,7 @@ repos:
       - id: pylint-check
         name: Run pylint
         entry: ./scripts/run_pylint.sh
-        language: script
+        language: system
         types: [python]
         stages: [commit]
         always_run: true
