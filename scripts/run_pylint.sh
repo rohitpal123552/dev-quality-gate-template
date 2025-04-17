@@ -10,8 +10,13 @@ print() {
 main() {
     echo "🔍 Running Pylint..."
 
-    pylint_output=$(pylint sample_module 2>&1 | tee /tmp/pylint_output.txt)
-    pylint_exit_code=$?
+       # Run pylint and tee output to both screen and file
+    pylint_output_file=$(mktemp)
+    pylint sample_module 2>&1 | tee "$pylint_output_file"
+    pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
+
+    echo "------------$pylint_exit_code"
+
 
     issue_lines=$(grep -E "^[^:]+:[0-9]+:[0-9]+: " /tmp/pylint_output.txt || true)
     if [[ -n "$issue_lines" ]]; then
