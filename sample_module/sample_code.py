@@ -12,7 +12,7 @@ def divide(a, b):
         raise ValueError("Cannot divide by zero")
     return a / b
 
-def is__even(n):
+def isEven(n):
     return n % 2 == 0
 
 def max_of_list(numbers):
