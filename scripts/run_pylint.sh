@@ -32,10 +32,17 @@ main() {
     pylint sample_module 2>&1 | tee "$pylint_output_file"
     pylint_exit_code=${PIPESTATUS[0]}
 
-    # Extract score
-    score_line=$(grep "Your code has been rated at" "$pylint_output_file" | tail -n1 || true)
-    # score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
-    score=$(echo "$score_line" | grep -E '[0-9]+\.[0-9]+(?=/10)' | head -n1)
+    # # Extract score
+    # score_line=$(grep "Your code has been rated at" "$pylint_output_file" | tail -n1 || true)
+    # # score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
+    # score=$(echo "$score_line" | grep -E '[0-9]+\.[0-9]+(?=/10)' | head -n1)
+        # Extract score
+    score=$(grep -oE 'Your code has been rated at ([0-9]+\.[0-9]+)/10' "$pylint_output_file" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10/\1/' | head -n1)
+
+    if [ -z "$score" ]; then
+        print "${RED}❌ Failed to extract pylint score.${NC}"
+        exit 1
+    fi
 
 
     print "\nPylint score: $score / 10"
