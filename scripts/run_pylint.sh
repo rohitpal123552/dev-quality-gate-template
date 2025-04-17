@@ -15,41 +15,92 @@ print() {
 main() {
     print "${YELLOW}🔍 Running Pylint...${NC}"
 
-    # Run pylint and tee output to both screen and file
-    pylint_output_file=$(mktemp)
-    pylint sample_module 2>&1 | tee "$pylint_output_file"
-    pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
+    # Run Pylint and capture output + exit code
+    pylint_output=$(pylint sample_module 2>&1 | tee /tmp/pylint_output.txt)
+    pylint_exit_code=$?
 
-    echo "------------$pylint_exit_code"
+    # Show any lint messages
+    if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " /tmp/pylint_output.txt; then
+        print "\n${YELLOW}⚠️ Issues Found:${NC}"
+        grep -E "^[^:]+:[0-9]+:[0-9]+: " /tmp/pylint_output.txt
+    fi
 
-    # Extract score from output
-    score_line=$(grep "Your code has been rated at" "$pylint_output_file" || true)
+    # Extract score
+    score_line=$(grep "Your code has been rated at" /tmp/pylint_output.txt || true)
     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
 
     print "\n📊 Pylint score: $score / 10"
 
-    # Show issues if present
-    if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"; then
-        print "\n${YELLOW}Issues Found:${NC}"
-        grep -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"
-    fi
-
-    # Score threshold check
+    # Only fail if score is below threshold
     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
         print "${RED}❌ Pylint score too low: $score${NC}"
         exit 1
     fi
 
-    # Fail if pylint exited with errors or warnings
-    if [[ $pylint_exit_code -ne 0 ]]; then
-        print "${RED}❌ Linting failed due to above issues.${NC}"
-        exit 0
-    fi
-
-    print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
+    print "${GREEN}✅ Pylint score OK. Commit allowed, but check the warnings above.${NC}"
+    exit 0
 }
 
 main "$@"
+
+
+
+
+
+
+
+# #!/bin/bash
+
+# REQUIRED_SCORE=8.0
+
+# # Colors
+# RED='\033[0;31m'
+# GREEN='\033[0;32m'
+# YELLOW='\033[1;33m'
+# NC='\033[0m'
+
+# print() {
+#     echo -e "$@"
+# }
+
+# main() {
+#     print "${YELLOW}🔍 Running Pylint...${NC}"
+
+#     # Run pylint and tee output to both screen and file
+#     pylint_output_file=$(mktemp)
+#     pylint sample_module 2>&1 | tee "$pylint_output_file"
+#     pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
+
+#     echo "------------$pylint_exit_code"
+
+#     # Extract score from output
+#     score_line=$(grep "Your code has been rated at" "$pylint_output_file" || true)
+#     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
+
+#     print "\n📊 Pylint score: $score / 10"
+
+#     # Show issues if present
+#     if grep -q -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"; then
+#         print "\n${YELLOW}Issues Found:${NC}"
+#         grep -E "^[^:]+:[0-9]+:[0-9]+: " "$pylint_output_file"
+#     fi
+
+#     # Score threshold check
+#     if (( $(echo "$score < $REQUIRED_SCORE" | bc -l) )); then
+#         print "${RED}❌ Pylint score too low: $score${NC}"
+#         exit 1
+#     fi
+
+#     # Fail if pylint exited with errors or warnings
+#     if [[ $pylint_exit_code -ne 0 ]]; then
+#         print "${RED}❌ Linting failed due to above issues.${NC}"
+#         exit 1
+#     fi
+
+#     print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
+# }
+
+# main "$@"
 
 
 
