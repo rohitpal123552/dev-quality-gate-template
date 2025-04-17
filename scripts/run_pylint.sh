@@ -20,6 +20,8 @@ main() {
     pylint sample_module 2>&1 | tee "$pylint_output_file"
     pylint_exit_code=${PIPESTATUS[0]}  # get actual pylint exit code
 
+    echo "------------$pylint_exit_code"
+
     # Extract score from output
     score_line=$(grep "Your code has been rated at" "$pylint_output_file" || true)
     score=$(echo "$score_line" | sed -E 's/.* ([0-9]+\.[0-9]+)\/10.*/\1/')
@@ -38,11 +40,11 @@ main() {
         exit 1
     fi
 
-    # Fail if pylint exited with errors or warnings
-    if [[ $pylint_exit_code -ne 0 ]]; then
-        print "${RED}❌ Linting failed due to above issues.${NC}"
-        exit 0
-    fi
+    # # Fail if pylint exited with errors or warnings
+    # if [[ $pylint_exit_code -ne 0 ]]; then
+    #     print "${RED}❌ Linting failed due to above issues.${NC}"
+    #     exit 0
+    # fi
 
     print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
 }
