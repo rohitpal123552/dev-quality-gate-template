@@ -26,7 +26,7 @@ run_pylint() {
 show_issues() {
     print "\n${YELLOW} Issues Found:${NC}"
     local issues
-    issues=$(echo "$1" | grep -E "^[^:]+:[0-9]+:[0-9]+:" || true)
+    issues=$(echo "$1" | grep -E "^[^:]+:[0-9]+:[0-9]+:")
 
     if [[ -n "$issues" ]]; then
         echo "$issues" | while IFS= read -r line; do
