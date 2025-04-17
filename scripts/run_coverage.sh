@@ -14,12 +14,6 @@ print() {
     echo -e "$@"
 }
 
-# run_tests_with_coverage() {
-#     print "${YELLOW}Running tests with coverage...${NC}"
-#     coverage_output=$(coverage run -m pytest 2>&1)
-#     echo "$coverage_output"
-# }
-
 run_tests_with_coverage() {
     print "${YELLOW}Running tests with coverage...${NC}"
 

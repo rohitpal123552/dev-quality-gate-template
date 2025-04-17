@@ -25,6 +25,6 @@ repos:
         language: script
         types: [python]
         stages: [pre-push]
-        pass_filenames: false  # ✅ Add this for consistency
+        pass_filenames: false  
         always_run: true
-        verbose: true           # ✅ Optional: show detailed output
+        verbose: true           
