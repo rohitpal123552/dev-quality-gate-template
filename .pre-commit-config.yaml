@@ -14,7 +14,9 @@ repos:
         language: script
         types: [python]
         stages: [pre-commit]
+        pass_filenames: false
         always_run: true
+        verbose: true
 
       - id: coverage-check
         name: Check test coverage
