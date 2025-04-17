@@ -17,10 +17,17 @@ run_pylint() {
     pylint_output=$(pylint sample_module/ || true)
     echo "$pylint_output" >&2  
     echo
-    # echo "${YELLOW} Issues Found:${NC}"
-    print "\n${YELLOW} Issues Found:${NC}"
-    print "$pylint_output" | grep -E "^.*:[0-9]+:[0-9]+: [A-Z][0-9]{4}:" || print "No issues found."
-    print
+    # Extract issues (e.g., lines with "C0103")
+    issues=$(echo "$pylint_output" | grep -E "^.*:[0-9]+:[0-9]+: [A-Z][0-9]{4}:" || true)
+
+    if [[ -n "$issues" ]]; then
+        print "\n${YELLOW}⚠️  Issues Found:${NC}"
+        echo "$issues" >&2
+    fi
+    # # echo "${YELLOW} Issues Found:${NC}"
+    # print "\n${YELLOW} Issues Found:${NC}"
+    # print "$pylint_output" | grep -E "^.*:[0-9]+:[0-9]+: [A-Z][0-9]{4}:" || print "No issues found."
+    # print
 }
 
 check_score() {
