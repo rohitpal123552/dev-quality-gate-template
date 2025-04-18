@@ -11,7 +11,6 @@ def divide(a, b):
     if b == 0:
         raise ValueError("Cannot divide by zero")
     return a / b
-
 def isEven(n):
     return n % 2 == 0
 
