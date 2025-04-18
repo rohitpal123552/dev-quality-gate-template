@@ -1,7 +1,6 @@
 # Dev Quality Gate Template 🚀
 
-A minimal, modular setup to **enforce code quality gates** during Git operations using **Pylint** and **Test Coverage** checks. Perfect for teams and solo developers aiming for clean code and maintainability.
-
+A lightweight yet powerful setup to automate code quality checks directly into your Git workflow. By integrating Pylint and Pytest Coverage into pre-commit and pre-push hooks, this template ensures that only clean, tested code makes it into your repository.
 ---
 
 ## High-Level Overview
