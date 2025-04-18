@@ -189,7 +189,7 @@ main "$@"
 #     # Fail if pylint exited with errors or warnings
 #     if [[ $pylint_exit_code -ne 0 ]]; then
 #         print "${RED}❌ Linting failed due to above issues.${NC}"
-#         exit 
+#         exit
 #     fi
 
 #     print "${GREEN}✅ Pylint passed with score $score and no issues.${NC}"
@@ -220,13 +220,13 @@ main "$@"
 # NC='\033[0m' # No Color
 
 # print() {
-#     echo -e "$@" >&2  
+#     echo -e "$@" >&2
 # }
 
 # run_pylint() {
 #     print "${YELLOW} Running Pylint...${NC}"
 #     pylint_output=$(pylint sample_module/ || true)
-#     echo "$pylint_output" >&2  
+#     echo "$pylint_output" >&2
 #     echo
 #     # Extract issues (e.g., lines with "C0103")
 #     issues=$(echo "$pylint_output" | grep -E "^.*:[0-9]+:[0-9]+: [A-Z][0-9]{4}:" || true)

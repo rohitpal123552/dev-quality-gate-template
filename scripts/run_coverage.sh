@@ -23,28 +23,28 @@ run_tests_with_coverage() {
 
     echo "$coverage_output"
 
-    # if [ $test_exit_code -ne 0 ]; then
-    #     print "\n${RED}Some tests failed. Summary of failures:${NC}"
+    if [ $test_exit_code -ne 0 ]; then
+        print "\n${RED}Some tests failed. Summary of failures:${NC}"
 
-    #     # Extract test failure summaries from pytest output
-    #     echo "$coverage_output" | awk '
-    #         /^FAILED/ {
-    #             print "🔻 " $0
-    #         }
-    #         /^\s*tests\// && /AssertionError/ {
-    #             print "   🔹 " $0
-    #         }
-    #     '
+        # Extract test failure summaries from pytest output
+        echo "$coverage_output" | awk '
+            /^FAILED/ {
+                print "🔻 " $0
+            }
+            /^\s*tests\// && /AssertionError/ {
+                print "   🔹 " $0
+            }
+        '
 
-    #     print "\n${RED}Please review the failed test cases above and fix them before committing.${NC}"
-    #     exit 1
-    # fi
+        print "\n${RED}Push blocked due to test failures. Please fix them.${NC}"
+        exit 1
+    fi
 }
 
 
 check_coverage() {
     coverage_report=$(coverage report 2>&1 || true)
-    # echo "$coverage_report" 
+    # echo "$coverage_report"
     if ! echo "$coverage_report" | grep -q 'TOTAL'; then
         print "${RED} Failed to parse coverage report.${NC}"
         echo "$coverage_report"
