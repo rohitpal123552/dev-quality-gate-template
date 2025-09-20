@@ -153,3 +153,8 @@ Slide 8:
 🧵 Want the full walkthrough?
 Check out the repo + save this post!
 #PythonTips #DeveloperTools #GitHooks #CleanCode
+
+
+
+
+https://cd38f2b3ed12bd5eac3ef4a77f746ba2.us-east-1.resend-links.com/CL0/https:%2F%2Fexperts.afterquery.com%2Fassessments%2Fjob%2F1753801489311%2FTFmhIGcyPuX6hlw9ZuHH4EbECT93/1/010001996703b9b9-be7a2ca7-e1e9-4003-9251-a2a8a48eb79e-000000/no-NW6J4S5N3-GJ9rdhFdnYVYu4cD46F99HjkXTOrtA=423
